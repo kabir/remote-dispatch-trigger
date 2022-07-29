@@ -1,0 +1,32 @@
+on:
+  workflow_dispatch:
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remote Dispatch
+        run: |
+          resp=$(curl -X POST -s "https://api.github.com/repos/${INPUT_OWNER}/${INPUT_REPO}/dispatches" \
+              -H "Accept: application/vnd.github.v3+json" \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer ${INPUT_TOKEN}" \
+              -d "{\"event_type\": \"${INPUT_EVENT_TYPE}\", \"client_payload\": ${INPUT_CLIENT_PAYLOAD} }")
+
+          if [ -z "$resp" ]
+          then
+            sleep 2
+          else
+            echo "Workflow failed to trigger"
+            echo "$resp"
+            exit 1
+          fi
+          
+      - name: Report failure
+        if: ${{ failure() }}
+        run: |
+          echo "It failed"
+          
+      - name: Report success
+        if: ${{ success() }}
+        run: |
+          echo "It passed"
