@@ -5,7 +5,7 @@ env:
   INPUT_REPO: openshift-sanity-test
   INPUT_TOKEN: ${{ secrets.REMOTE_DISPATCH_TOKEN }}
   INPUT_EVENT_TYPE: trigger_run
-  TEST: 'x=$GITHUB_REPOSITORY'
+  TEST: x=$GITHUB_REPOSITORY
   INPUT_CLIENT_PAYLOAD: '{"test" : "123"}'
 jobs:
   run-tests:
