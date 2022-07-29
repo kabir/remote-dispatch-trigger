@@ -1,5 +1,11 @@
 on:
   workflow_dispatch:
+env:
+  INPUT_OWNER: kabir
+  INPUT_REPO: openshift-sanity-test
+  INPUT_TOKEN: ${{ secrets.REMOTE_DISPATCH_TOKEN }}
+  INPUT_EVENT_TYPE: trigger_run
+  INPUT_CLIENT_PAYLOAD: '{"test" : "123"}'
 jobs:
   run-tests:
     runs-on: ubuntu-latest
@@ -20,13 +26,3 @@ jobs:
             echo "$resp"
             exit 1
           fi
-          
-      - name: Report failure
-        if: ${{ failure() }}
-        run: |
-          echo "It failed"
-          
-      - name: Report success
-        if: ${{ success() }}
-        run: |
-          echo "It passed"
