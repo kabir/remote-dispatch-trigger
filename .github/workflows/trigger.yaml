@@ -11,10 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Output Event
+        env:
+          GITHUB_CONTEXT: ${{toJson(github)}}
         run: |
-          echo toJSON(${{ github.event}}) 
+          echo ${GITHUB_CONTEXT}
           
       - name: Remote Dispatch
+    
         run: |
           
           
