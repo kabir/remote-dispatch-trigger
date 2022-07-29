@@ -19,9 +19,15 @@ jobs:
       - name: Remote Dispatch
     
         run: |
+          echo $GITHUB_REPOSITORY
           
-          
-          INPUT_CLIENT_PAYLOAD='{"triggerRepo" : "$GITHUB_REPOSITORY", "ref" : "$GITHUB_REF", "triggerWorkflowRunId" : "$GITHUB_REF"}'
+          #INPUT_CLIENT_PAYLOAD='{\"triggerRepo\" : "$GITHUB_REPOSITORY", "ref" : "$GITHUB_REF", "triggerWorkflowRunId" : "$GITHUB_REF"}'
+          INPUT_CLIENT_PAYLOAD='{\"triggerRepo\" : "$GITHUB_REPOSITORY"}'
+
+          echo "INPUT_CLIENT_PAYLOAD:"
+          echo "$INPUT_CLIENT_PAYLOAD"
+
+          INPUT_CLIENT_PAYLOAD='{\"triggerRepo\" : $GITHUB_REPOSITORY}'
 
           echo "INPUT_CLIENT_PAYLOAD:"
           echo "$INPUT_CLIENT_PAYLOAD"
