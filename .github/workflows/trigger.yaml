@@ -39,7 +39,7 @@ jobs:
           curl \
               -H "Accept: application/vnd.github+json" \ 
               -H "Authorization: token ${GITHUB_TOKEN}" \
-              https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
+              ${URL}
           
       - name: Remote Dispatch
     
