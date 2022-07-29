@@ -12,6 +12,7 @@ jobs:
     steps:
       - name: Output Event
         run: |
+          echo ${{ toJSON(github) }}
           
       - name: Remote Dispatch
         run: |
