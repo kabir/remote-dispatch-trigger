@@ -1,0 +1,16 @@
+name: Report back on test
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [report-cloud-tests-run-status]
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output
+        env:
+          #MESSAGE: ${{ github.event.client_payload.message }}
+          MESSAGE: ${{ toJSON(github.event.client_payload) }}
+        run: echo $MESSAGE
+        
