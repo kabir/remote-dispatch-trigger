@@ -5,7 +5,7 @@ env:
   INPUT_OWNER: kabir
   INPUT_REPO: openshift-sanity-test
   INPUT_TOKEN: ${{ secrets.REMOTE_DISPATCH_TOKEN }}
-  INPUT_EVENT_TYPE: trigger_run
+  INPUT_EVENT_TYPE: trigger-cloud-tests-run
 jobs:
   run-tests:
     runs-on: ubuntu-latest
