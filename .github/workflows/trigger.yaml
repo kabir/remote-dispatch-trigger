@@ -32,10 +32,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+        
+          URL="https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          echo $URL
+        
           curl \
               -H "Accept: application/vnd.github+json" \ 
               -H "Authorization: token ${GITHUB_TOKEN}" \
-              https://api.github.com/repos/OWNER/REPO/actions/runs/$GITHUB_RUN_ID
+              https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
           
       - name: Remote Dispatch
     
