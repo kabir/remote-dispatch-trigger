@@ -21,13 +21,17 @@ jobs:
         run: |
           echo $GITHUB_REPOSITORY
           
-          #INPUT_CLIENT_PAYLOAD='{\"triggerRepo\" : "$GITHUB_REPOSITORY", "ref" : "$GITHUB_REF", "triggerWorkflowRunId" : "$GITHUB_REF"}'
-          INPUT_CLIENT_PAYLOAD='{\"triggerRepo\" : "$GITHUB_REPOSITORY"}'
+          #INPUT_CLIENT_PAYLOAD='{\"triggerRepo\" : "$GITHUB_REPOSITORY", "ref" : "$GITHUB_REF", "triggerWorkflowRunId" : "$GITHUB_RUN_ID"}'
+          #INPUT_CLIENT_PAYLOAD='{\"triggerRepo\" : "$GITHUB_REPOSITORY"}'
 
-          echo "INPUT_CLIENT_PAYLOAD:"
-          echo "$INPUT_CLIENT_PAYLOAD"
+          #echo "INPUT_CLIENT_PAYLOAD:"
+          #echo "$INPUT_CLIENT_PAYLOAD"
 
-          INPUT_CLIENT_PAYLOAD='{\"triggerRepo\" : $GITHUB_REPOSITORY}'
+          INPUT_CLIENT_PAYLOAD=$( jq -n \
+                  --arg tr "$GITHUB_REPOSITORY" \
+                  --arg ref "$GITHUB_REF" \
+                  --arg twrid "$GITHUB_RUN_ID" \
+                  '{triggerRepo: $tr, ref: $ref, triggerWorkflowRunId: $twrid}' )
 
           echo "INPUT_CLIENT_PAYLOAD:"
           echo "$INPUT_CLIENT_PAYLOAD"
