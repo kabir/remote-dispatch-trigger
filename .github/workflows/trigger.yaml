@@ -4,6 +4,7 @@ on:
 env:
   INPUT_OWNER: kabir
   INPUT_REPO: openshift-sanity-test
+  INPUT_STATUS_BRANCH: run-status
   INPUT_TOKEN: ${{ secrets.REMOTE_DISPATCH_TOKEN }}
   INPUT_EVENT_TYPE: trigger-cloud-tests-run
 jobs:
@@ -30,7 +31,8 @@ jobs:
                   --arg tr "$GITHUB_REPOSITORY" \
                   --arg ref "$GITHUB_REF" \
                   --arg twrid "$GITHUB_RUN_ID" \
-                  '{triggerRepo: $tr, ref: $ref, triggerWorkflowRunId: $twrid}' )
+                  --arg twrno "$GITHUB_RUN_NUMBER" \
+                  '{triggerRepo: $tr, ref: $ref, triggerWorkflowRunId: $twrid}', triggerWorkflowRunNumber: $twrno}' )
 
           echo "INPUT_CLIENT_PAYLOAD:"
           echo "$INPUT_CLIENT_PAYLOAD"
@@ -50,3 +52,9 @@ jobs:
             echo "$resp"
             exit 1
           fi
+          
+#       - name: Temp Sleep
+#         run: |
+#           echo "Sleeping 120s..."
+#           sleep 120
+#           echo "Woke up!"
