@@ -7,6 +7,9 @@ env:
   STATUS_BRANCH: run-status
   TOKEN: ${{ secrets.REMOTE_DISPATCH_TOKEN }}
   EVENT_TYPE: trigger-cloud-tests-run
+  RESULT_INITIAL_WAIT_SECONDS: 4
+  RESULT_POLL_WAIT_SECONDS: 2
+  RESULT_MAX_POLL_ATTEMPTS: 10
 jobs:
   run-tests:
     runs-on: ubuntu-latest
@@ -58,9 +61,41 @@ jobs:
             echo "$resp"
             exit 1
           fi
+
+      - name: Wait for remote job completion
+        run: |
+          echo "Waiting/polling for remote test execution to complete"
+          FILENAME="${REMOTE_RUN_ID}-${REMOTE_RUN_NUMBER}.json"
+          echo "Sleeping $RESULT_INITIAL_WAIT_SECONDS seconds before polling"
+          sleep $RESULT_INITIAL_WAIT_SECONDS
+          i=0
+          while [[ "${RESULT}" != '0' ]]
+          do
+            git fetch origin
+            git reset --hard origin/$STATUS_BRANCH
+            
+            # Check file is there and break if it is
+            if test -f "$FILENAME"; then
+              break
+            fi
+            
+            
+            ((i++))
+            if [[ "$i" == "$RESULT_MAX_POLL_ATTEMPTS" ]]; then
+              echo "Timeout receiving the results"
+              exit 1
+            fi
+
+            echo "Sleeping $RESULT_POLL_WAIT_SECONDS seconds before polling again"
+            sleep $RESULT_POLL_WAIT_SECONDS
+          done
+
+          STATUS="$(jq .status $FILENAME)"
+          MESSAGE="$(jq .message $FILENAME)"
           
-#       - name: Temp Sleep
-#         run: |
-#           echo "Sleeping 120s..."
-#           sleep 120
-#           echo "Woke up!"
+          if [ "${STATUS}" = "failed" ]; then
+            1>&2 echo $MESSAGE
+            exit 1
+          fi
+          
+          echo $MESSAGE
