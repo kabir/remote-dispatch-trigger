@@ -2,11 +2,11 @@ on:
   workflow_dispatch:
   push:
 env:
-  INPUT_OWNER: kabir
-  INPUT_REPO: openshift-sanity-test
-  INPUT_STATUS_BRANCH: run-status
-  INPUT_TOKEN: ${{ secrets.REMOTE_DISPATCH_TOKEN }}
-  INPUT_EVENT_TYPE: trigger-cloud-tests-run
+  REPOSITORY: kabir/openshift-sanity-test
+  REPO: openshift-sanity-test
+  STATUS_BRANCH: run-status
+  TOKEN: ${{ secrets.REMOTE_DISPATCH_TOKEN }}
+  EVENT_TYPE: trigger-cloud-tests-run
 jobs:
   run-tests:
     runs-on: ubuntu-latest
@@ -16,33 +16,39 @@ jobs:
 #           GITHUB_CONTEXT: ${{toJson(github)}}
 #         run: |
 #           echo ${GITHUB_CONTEXT}
+      
+      - name: Checkout run-status branch
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ env.REPOSITORY }}
+          ref: run-status
           
       - name: Remote Dispatch    
         run: |
           echo $GITHUB_REPOSITORY
           
-          #INPUT_CLIENT_PAYLOAD='{\"triggerRepo\" : "$GITHUB_REPOSITORY", "ref" : "$GITHUB_REF", "triggerWorkflowRunId" : "$GITHUB_RUN_ID"}'
-          #INPUT_CLIENT_PAYLOAD='{\"triggerRepo\" : "$GITHUB_REPOSITORY"}'
+          #CLIENT_PAYLOAD='{\"triggerRepo\" : "$GITHUB_REPOSITORY", "ref" : "$GITHUB_REF", "triggerWorkflowRunId" : "$GITHUB_RUN_ID"}'
+          #CLIENT_PAYLOAD='{\"triggerRepo\" : "$GITHUB_REPOSITORY"}'
 
-          #echo "INPUT_CLIENT_PAYLOAD:"
-          #echo "$INPUT_CLIENT_PAYLOAD"
+          #echo "CLIENT_PAYLOAD:"
+          #echo "$CLIENT_PAYLOAD"
 
-          INPUT_CLIENT_PAYLOAD=$( jq -n \
+          CLIENT_PAYLOAD=$( jq -n \
                   --arg tr "$GITHUB_REPOSITORY" \
                   --arg ref "$GITHUB_REF" \
                   --arg twrid "$GITHUB_RUN_ID" \
                   --arg twrno "$GITHUB_RUN_NUMBER" \
                   '{triggerRepo: $tr, ref: $ref, triggerWorkflowRunId: $twrid, triggerWorkflowRunNumber: $twrno}' )
 
-          echo "INPUT_CLIENT_PAYLOAD:"
-          echo "$INPUT_CLIENT_PAYLOAD"
+          echo "CLIENT_PAYLOAD:"
+          echo "$CLIENT_PAYLOAD"
 
 
-          resp=$(curl -X POST -s "https://api.github.com/repos/${INPUT_OWNER}/${INPUT_REPO}/dispatches" \
+          resp=$(curl -X POST -s "https://api.github.com/repos/${REPOSITORY}/dispatches" \
               -H "Accept: application/vnd.github.v3+json" \
               -H "Content-Type: application/json" \
-              -H "Authorization: Bearer ${INPUT_TOKEN}" \
-              -d "{\"event_type\": \"${INPUT_EVENT_TYPE}\", \"client_payload\": ${INPUT_CLIENT_PAYLOAD} }")
+              -H "Authorization: Bearer ${TOKEN}" \
+              -d "{\"event_type\": \"${EVENT_TYPE}\", \"client_payload\": ${CLIENT_PAYLOAD} }")
 
           if [ -z "$resp" ]
           then
