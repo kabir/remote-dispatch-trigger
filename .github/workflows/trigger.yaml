@@ -71,16 +71,22 @@ jobs:
           i=0
           while [[ "${RESULT}" != '0' ]]
           do
+            echo "debug - fetching"
             git fetch origin
+            echo "debug - resetting"
             git reset --hard origin/$STATUS_BRANCH
             
+            echo "debug - is file there?"
             # Check file is there and break if it is
             if test -f "$FILENAME"; then
+              echo "debug - file is there"
               break
             fi
             
             
+            echo "debug - incrementing counter"
             ((i++))
+            echo "debug - checking max poll attempts"
             if [[ "$i" == "$RESULT_MAX_POLL_ATTEMPTS" ]]; then
               echo "Timeout receiving the results"
               exit 1
