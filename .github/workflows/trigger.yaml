@@ -32,7 +32,7 @@ jobs:
                   --arg ref "$GITHUB_REF" \
                   --arg twrid "$GITHUB_RUN_ID" \
                   --arg twrno "$GITHUB_RUN_NUMBER" \
-                  '{triggerRepo: $tr, ref: $ref, triggerWorkflowRunId: $twrid}', triggerWorkflowRunNumber: $twrno}' )
+                  '{triggerRepo: $tr, ref: $ref, triggerWorkflowRunId: $twrid, triggerWorkflowRunNumber: $twrno}' )
 
           echo "INPUT_CLIENT_PAYLOAD:"
           echo "$INPUT_CLIENT_PAYLOAD"
