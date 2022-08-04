@@ -29,19 +29,15 @@ jobs:
       - name: Remote Dispatch    
         run: |
           echo $GITHUB_REPOSITORY
+
+          FILENAME="$GITHUB_RUN_ID-$GITHUB_RUN_NUMBER-$GITHUB_RUN_ATTEMPT.json"
+          echo "FILENAME=$FILENAME" >> $GITHUB_ENV
           
-          #CLIENT_PAYLOAD='{\"triggerRepo\" : "$GITHUB_REPOSITORY", "ref" : "$GITHUB_REF", "triggerWorkflowRunId" : "$GITHUB_RUN_ID"}'
-          #CLIENT_PAYLOAD='{\"triggerRepo\" : "$GITHUB_REPOSITORY"}'
-
-          #echo "CLIENT_PAYLOAD:"
-          #echo "$CLIENT_PAYLOAD"
-
           CLIENT_PAYLOAD=$( jq -n \
                   --arg tr "$GITHUB_REPOSITORY" \
                   --arg ref "$GITHUB_REF" \
-                  --arg twrid "$GITHUB_RUN_ID" \
-                  --arg twrno "$GITHUB_RUN_NUMBER" \
-                  '{triggerRepo: $tr, ref: $ref, triggerWorkflowRunId: $twrid, triggerWorkflowRunNumber: $twrno}' )
+                  --arg sf "$FILENAME" 
+                  '{triggerRepo: $tr, ref: $ref, statusFile: $sf}' )
 
           echo "CLIENT_PAYLOAD:"
           echo "$CLIENT_PAYLOAD"
@@ -65,7 +61,6 @@ jobs:
       - name: Wait for remote job completion
         run: |
           echo "Waiting/polling for remote test execution to complete"
-          FILENAME="${GITHUB_RUN_ID}-${GITHUB_RUN_NUMBER}.json"
           echo "Sleeping $RESULT_INITIAL_WAIT_SECONDS seconds before polling"
           sleep $RESULT_INITIAL_WAIT_SECONDS
           i=0
