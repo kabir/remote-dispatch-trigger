@@ -98,11 +98,8 @@ jobs:
           
           echo "Status: $STATUS"
           
-          if [ "${STATUS}" = "failed" ]; then
+          if [ "${STATUS}" == "failed" ]; then
             1>&2 echo $MESSAGE
-            echo "debug - directory contents"
-            ls
-            
             exit 1
           fi
           
