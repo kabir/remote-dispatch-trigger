@@ -93,8 +93,8 @@ jobs:
 
           cat $FILENAME
 
-          STATUS="$(jq .status $FILENAME)"
-          MESSAGE="$(jq .message $FILENAME)"
+          STATUS="$(jq -r .status $FILENAME)"
+          MESSAGE="$(jq -r .message $FILENAME)"
           
           echo "Status: $STATUS"
           
