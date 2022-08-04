@@ -9,7 +9,7 @@ env:
   EVENT_TYPE: trigger-cloud-tests-run
   RESULT_INITIAL_WAIT_SECONDS: 4
   RESULT_POLL_WAIT_SECONDS: 2
-  RESULT_MAX_POLL_ATTEMPTS: 10
+  RESULT_MAX_POLL_ATTEMPTS: 100
 jobs:
   run-tests:
     runs-on: ubuntu-latest
