@@ -85,9 +85,9 @@ jobs:
             
             
             echo "debug - incrementing counter"
-            ((i++))
+            i=$((i+1))
             echo "debug - checking max poll attempts"
-            if [[ "$i" == "$RESULT_MAX_POLL_ATTEMPTS" ]]; then
+            if [ $i -eq $RESULT_MAX_POLL_ATTEMPTS ]; then
               echo "Timeout receiving the results"
               exit 1
             fi
