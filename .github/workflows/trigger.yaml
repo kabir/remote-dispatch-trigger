@@ -36,7 +36,7 @@ jobs:
           CLIENT_PAYLOAD=$( jq -n \
                   --arg tr "$GITHUB_REPOSITORY" \
                   --arg ref "$GITHUB_REF" \
-                  --arg sf "$FILENAME" 
+                  --arg sf "$FILENAME" \
                   '{triggerRepo: $tr, ref: $ref, statusFile: $sf}' )
 
           echo "CLIENT_PAYLOAD:"
