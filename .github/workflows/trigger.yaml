@@ -91,16 +91,15 @@ jobs:
             sleep $RESULT_POLL_WAIT_SECONDS
           done
 
-          cat $FILENAME
+          # cat $FILENAME
 
           STATUS="$(jq -r .status $FILENAME)"
           MESSAGE="$(jq -r .message $FILENAME)"
           
-          echo "Status: $STATUS"
+          # echo "Status: $STATUS"
           
           if [[ "${STATUS}" == "failed" ]]; then
             echo -e "\e[31m${MESSAGE}\e[0m"
-            echo $MESSAGE
             exit 1
           fi
           
