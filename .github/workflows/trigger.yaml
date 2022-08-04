@@ -65,7 +65,7 @@ jobs:
       - name: Wait for remote job completion
         run: |
           echo "Waiting/polling for remote test execution to complete"
-          FILENAME="${REMOTE_RUN_ID}-${REMOTE_RUN_NUMBER}.json"
+          FILENAME="${GITHUB_RUN_ID}-${GITHUB_RUN_NUMBER}.json"
           echo "Sleeping $RESULT_INITIAL_WAIT_SECONDS seconds before polling"
           sleep $RESULT_INITIAL_WAIT_SECONDS
           i=0
